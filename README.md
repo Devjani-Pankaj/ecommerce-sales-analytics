@@ -1,103 +1,98 @@
-# E-Commerce Sales Analytics
+# Flipkart Mobiles Analytics Dashboard
 
-An end-to-end sales analytics project: a synthetic (intentionally messy)
-e-commerce dataset is cleaned, loaded into a SQL warehouse, analyzed with
-pandas, and explored through both static charts and an interactive
-Streamlit dashboard.
+An interactive analytics dashboard built with **Streamlit** and **Plotly** for exploring the Flipkart Mobiles dataset — pricing trends, brand comparisons, discount analysis, and more.
 
-## What this demonstrates
+## Dataset
 
-- **Data cleaning** — deduplication, missing-value handling, type
-  normalization, invalid-row detection, with a printed data-quality report
-  (`src/data_cleaning.py`)
-- **SQL** — a SQLite warehouse with hand-written analytical queries,
-  including a window-function (`NTILE`) RFM calculation (`sql/queries.sql`)
-- **Data analysis with pandas** — monthly revenue trends, top
-  products/categories, RFM customer segmentation, and cohort retention
-  analysis (`src/analysis.py`)
-- **Data visualization** — matplotlib/seaborn charts (`src/visualize.py`)
-  and a filterable, interactive Streamlit dashboard (`dashboard/app.py`)
-- **Testing** — pytest unit tests against small fixture DataFrames
-  (`tests/`)
-- **Clean project structure** — a CLI entry point (`main.py`), a reusable
-  `src/` package, and no notebook-only spaghetti
+**Source:** [Flipkart Mobiles Dataset on Kaggle](https://www.kaggle.com/datasets/devsubhash/flipkart-mobiles-dataset)
 
-## Project structure
+The dataset contains **3,114 mobile phone listings** from Flipkart with the following fields:
+- Brand, Model, Color
+- Memory (RAM), Storage
+- Rating (out of 5)
+- Selling Price, Original Price
 
-```
-ecommerce-sales-analytics/
-├── main.py                 # CLI: generate / clean / load-db / visualize / run-all
-├── src/
-│   ├── data_generator.py   # synthetic dataset (with intentional messiness)
-│   ├── data_cleaning.py    # cleaning pipeline + data-quality report
-│   ├── database.py         # loads cleaned data into SQLite
-│   ├── analysis.py         # revenue, RFM, cohort retention (pure pandas)
-│   └── visualize.py        # static PNG charts
-├── sql/queries.sql         # sample analyst SQL queries against warehouse.db
-├── dashboard/app.py        # Streamlit dashboard
-├── tests/                  # pytest unit tests
-├── data/                   # raw/, processed/, warehouse.db (generated, gitignored)
-└── reports/figures/        # generated PNG charts (gitignored)
-```
+## Dashboard Screenshots
+
+### Overview — KPIs & Brand Distribution
+![Dashboard Overview](screenshots/dashboard_overview.png)
+
+### Rating Distribution, Discount Analysis & Price vs Rating
+![Charts - Ratings & Scatter](screenshots/dashboard_charts1.png)
+
+### Price Segments & Brand Market Share Treemap
+![Charts - Segments & Treemap](screenshots/dashboard_charts2.png)
+
+### Top Deals Table (Highest Discounts)
+![Deals & Data Table](screenshots/dashboard_charts3.png)
+
+### Full Searchable Dataset
+![Full Dataset](screenshots/dashboard_deals.png)
+
+## Features
+
+- **5 KPI Cards** — Total listings, brands count, avg price, avg rating, avg discount
+- **Interactive Plotly Charts** — Hover tooltips, zoom, pan on all visualizations
+- **Brand Analysis** — Listings count & average selling price by brand
+- **Rating Distribution** — Bar chart of rating spread across listings
+- **Discount Analysis** — Average discount % by brand
+- **Price vs Rating Scatter** — Color-coded by brand with model details on hover
+- **Storage Breakdown** — Listings by storage capacity
+- **Price Segments** — Donut chart + bar chart (Under 10K, 10K-20K, etc.)
+- **Brand Market Share** — Interactive treemap visualization
+- **Top 20 Best Deals** — Highest discount % with color-gradient table
+- **Full Dataset** — Searchable, sortable table with all listings
+- **Sidebar Filters** — Brand, price range, minimum rating, RAM, storage
 
 ## Setup
 
 Requires Python 3.9+.
 
 ```bash
-python -m venv .venv
-.venv\Scripts\activate        # Windows
-# source .venv/bin/activate   # macOS/Linux
+# Clone the repo
+git clone https://github.com/Devjani-Pankaj/ecommerce-sales-analytics.git
+cd ecommerce-sales-analytics
 
+# Create virtual environment
+python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # macOS/Linux
+
+# Install dependencies
 pip install -r requirements.txt
 ```
 
-## Run the pipeline
+## Run the Dashboard
 
-```bash
-python main.py run-all
-```
+1. Download the dataset from [Kaggle](https://www.kaggle.com/datasets/devsubhash/flipkart-mobiles-dataset) and place `Flipkart_Mobiles.csv` in the project root or update the `DATA_PATH` in `dashboard/app.py`.
 
-This generates the synthetic raw data, cleans it (printing a data-quality
-report), loads it into `data/warehouse.db`, and saves charts to
-`reports/figures/`. You can also run each step individually:
-
-```bash
-python main.py generate
-python main.py clean
-python main.py load-db
-python main.py visualize
-```
-
-## Launch the dashboard
-
+2. Launch the dashboard:
 ```bash
 streamlit run dashboard/app.py
 ```
 
-Filter by date range, category, and region; see live KPIs, revenue trends,
-top products, and an RFM segment breakdown with a per-customer table.
+3. Open **http://localhost:8501** in your browser.
 
-## Run the tests
+## Tech Stack
 
-```bash
-pytest
+- **Python 3.9+**
+- **Streamlit** — Web dashboard framework
+- **Plotly** — Interactive charts (bar, scatter, treemap, donut)
+- **Pandas** — Data processing and analysis
+- **Selenium** — Automated screenshot capture
+
+## Project Structure
+
+```
+ecommerce-sales-analytics/
+├── dashboard/
+│   └── app.py              # Streamlit dashboard (main app)
+├── screenshots/            # Dashboard screenshots for README
+├── src/                    # Data processing modules
+├── requirements.txt        # Python dependencies
+└── README.md
 ```
 
-## Explore the SQL
+## License
 
-```bash
-sqlite3 data/warehouse.db < sql/queries.sql
-```
-
-Or open `data/warehouse.db` in any SQLite client (e.g. DB Browser for
-SQLite) and run the queries in `sql/queries.sql` individually.
-
-## Notes on the data
-
-The dataset is synthetically generated (`src/data_generator.py`) rather
-than downloaded, so the project is fully self-contained and reproducible
-(fixed random seed). It's deliberately seeded with realistic messiness —
-duplicate rows, missing regions, negative quantities, missing order
-totals — so the cleaning step has genuine problems to solve rather than
-running against already-tidy data.
+This project is for educational and portfolio purposes.

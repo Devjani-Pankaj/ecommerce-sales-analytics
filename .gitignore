@@ -7,3 +7,5 @@ data/processed/*.csv
 data/warehouse.db
 reports/figures/*.png
 .pytest_cache/
+take_screenshots.py
+screenshots/dashboard_full.png
